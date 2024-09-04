@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+void monoalphabeticCipher(char plaintext[], const char key[]) {
+    char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    char ciphertext[100];
+
+    for (int i = 0; plaintext[i] != '\0'; i++) {
+        char ch = plaintext[i];
+
+        if (isalpha(ch)) {
+            int isUpper = isupper(ch);
+            ch = toupper(ch);
+            int index = ch - 'A';
+
+            char encryptedChar = key[index];
+
+            if (!isUpper) {
+                encryptedChar = tolower(encryptedChar);
+            }
+
+            ciphertext[i] = encryptedChar;
+        } else {
+            ciphertext[i] = ch; 
+        }
+    }
+
+    ciphertext[strlen(plaintext)] = '\0'; 
+    printf("Ciphertext: %s\n", ciphertext);
+}
+
+int main() {
+    char plaintext[100];
+    char key[27];
+
+    printf("Enter a string to encrypt: ");
+    fgets(plaintext, sizeof(plaintext), stdin);
+
+    size_t len = strlen(plaintext);
+    if (len > 0 && plaintext[len - 1] == '\n') {
+        plaintext[len - 1] = '\0';
+    }
+
+    printf("Enter a 26-letter key (cipher alphabet): ");
+    scanf("%26s", key);
+
+    if (strlen(key) != 26) {
+        printf("Invalid key! The key must contain 26 unique letters.\n");
+        return 1;
+    }
+
+    monoalphabeticCipher(plaintext, key);
+
+    return 0;
+}
